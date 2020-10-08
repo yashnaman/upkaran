@@ -3,7 +3,7 @@ This is was supposed to be solution to batching transaction by an EOA and not a 
 The idea was to make a contract that supports "PemitAndCall" pattern. And I was going to make different recipies using it
 For example:
 
-1. Claim and convert your uni to eth/DAI/USDC in one transaction
+1. Claim(airdropped uni not the one got as the reward for farming) and convert your uni to eth/DAI/USDC in one transaction
 
 I made the contract as you can see in the [./contracts/Upkaran.sol](https://github.com/yashnaman/upkaran/blob/master/contracts/Upkaran.sol) but this pattern can be abused if used in the dark forest that is ethereum.
 
