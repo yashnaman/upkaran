@@ -1,0 +1,14 @@
+{
+  "name": "recepie1-augur-foundry",
+  "version": "1.0.0",
+  "description": "preapration for recipie ",
+  "main": "prepare.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yashnaman",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.6"
+  }
+}
