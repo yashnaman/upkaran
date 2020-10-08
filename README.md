@@ -1,15 +1,16 @@
+This is was supposed to be solution to batching transaction by an EOA and not a contract wallet.
+
 The idea was to make a contract that supports "PemitAndCall" pattern. And I was going to make different recipies using it
-FOr example:
+For example:
 
 1. Claim and convert your uni to eth/DAI/USDC in one transaction
 
-I made the contract as you can see in the ./contracts/Upkaran.sol but this pattern can be abused if used in the dark forest that is ethereum.
+I made the contract as you can see in the [./contracts/Upkaran.sol](https://github.com/yashnaman/upkaran/blob/master/contracts/Upkaran.sol) but this pattern can be abused if used in the dark forest that is ethereum.
 
 Some one could that these signature when user's transaction is still in the mempool and drain user's funds
 
-I thought of ideas to prevent this but there is none.
+I thought of ideas to prevent this but could not come up with any.
 
-This is was supposed to be solution to batching transaction by an EOA and not a contract wallet.
 
 Let me know if you have any way to make this pattern work.
 
