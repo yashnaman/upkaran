@@ -16,3 +16,6 @@ Let me know if you have any way to make this pattern work.
 
 What now?<br>
 Now I am going to make a specialized contract for every pattern that I want to implement using same pattern that [uniswapRouter02](https://github.com/Uniswap/uniswap-v2-periphery/blob/master/contracts/UniswapV2Router01.sol#L137) uses
+
+update: 
+Used this pattern to support gasless swaps on balancer by updating their [multihop](https://github.com/Upkaranam/exchange-proxy/blob/multi-hop/contracts/ExchangeProxy.sol) contract. Also this pattern inherentely supports batching of transactions : 
