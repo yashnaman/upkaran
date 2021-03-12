@@ -9,18 +9,20 @@ module.exports = async function (deployer, networks, accounts) {
   await deployer.deploy(Upkaran, trustredForwarder.mainnet);
   await deployer.deploy(TestERC20);
 
+
   let upkaran = await Upkaran.deployed();
+  console.log("upkaran", upkaran.address);
 
-  let testERC20 = await TestERC20.deployed();
+  // let testERC20 = await TestERC20.deployed();
 
-  let call = {
-    to: testERC20.address,
-    value: '0',
-    data: testERC20.contract.methods.transferFrom(accounts[0], accounts[0], "1").encodeABI(),
-  };
-  console.log(call);
-  await upkaran.batch([call]);
+  // let call = {
+  //   to: testERC20.address,
+  //   value: '0',
+  //   data: testERC20.contract.methods.transferFrom(accounts[0], accounts[0], "0").encodeABI(),
+  // };
+  // console.log(call);
+  // await upkaran.batch([call], { from: accounts[0] });
 
-  console.log(await upkaran.contract.getPastEvents("SomeData"));
+  // console.log(await upkaran.contract.getPastEvents("SomeData"));
 
 };

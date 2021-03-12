@@ -73,24 +73,20 @@ contract Upkaran_With_TransferFrom_Restriction is
 
     /**
      * @dev Receive a flash loan.
-     * @param initiator The initiator of the loan.
-     * @param token The loan currency.
-     * @param amount The amount of tokens lent.
-     * @param fee The additional amount of tokens to repay.
+     * unUsedParam initiator The initiator of the loan.*
+     * unUsedParam token The loan currency.
+     * unUsedParam amount The amount of tokens lent.
+     * unUsedParam fee The additional amount of tokens to repay.
      * @param data Arbitrary data structure, intended to contain user-defined parameters.
      * @return The keccak256 hash of "ERC3156FlashBorrower.onFlashLoan"
      */
     function onFlashLoan(
-        address initiator,
-        address token,
-        uint256 amount,
-        uint256 fee,
+        address, /*initiator*/
+        address, /*token*/
+        uint256, /*amount*/
+        uint256, /*fee*/
         bytes calldata data
     ) external override returns (bytes32) {
-        initiator;
-        token;
-        amount;
-        fee;
         _decodeAndCall(data);
         return keccak256('ERC3156FlashBorrower.onFlashLoan');
     }
@@ -101,25 +97,20 @@ contract Upkaran_With_TransferFrom_Restriction is
         To accept the transfer, this must return
         `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
         (i.e. 0xf23a6e61, or its own function selector).
-        @param operator The address which initiated the transfer (i.e. _msgSender())
-        @param from The address which previously owned the token
-        @param id The ID of the token being transferred
-        @param value The amount of tokens being transferred
+        unUsedParam operator The address which initiated the transfer (i.e. _msgSender())
+        unUsedParam from The address which previously owned the token
+        unUsedParam id The ID of the token being transferred
+        unUsedParam value The amount of tokens being transferred
         @param data Additional data with no specified format
         @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
     */
     function onERC1155Received(
-        address operator,
-        address from,
-        uint256 id,
-        uint256 value,
+        address, /*operator*/
+        address, /*from*/
+        uint256, /*id*/
+        uint256, /*value*/
         bytes calldata data
     ) external override returns (bytes4) {
-        /**@notice To make sure that no other tokenId other than what this ERC20 is a wrapper for is sent here*/
-        operator;
-        from;
-        id;
-        value;
         _decodeAndCall(data);
         return ERC1155Receiver(0).onERC1155Received.selector;
     }
@@ -130,25 +121,20 @@ contract Upkaran_With_TransferFrom_Restriction is
         been updated. To accept the transfer(s), this must return
         `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`
         (i.e. 0xbc197c81, or its own function selector).
-        @param operator The address which initiated the batch transfer (i.e. _msgSender())
-        @param from The address which previously owned the token
-        @param ids An array containing ids of each token being transferred (order and length must match values array)
-        @param values An array containing amounts of each token being transferred (order and length must match ids array)
+        unUsedParam operator The address which initiated the batch transfer (i.e. _msgSender())
+        unUsedParam from The address which previously owned the token
+        unUsedParam ids An array containing ids of each token being transferred (order and length must match values array)
+        unUsedParam values An array containing amounts of each token being transferred (order and length must match ids array)
         @param data Additional data with no specified format
         @return `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))` if transfer is allowed
     */
     function onERC1155BatchReceived(
-        address operator,
-        address from,
-        uint256[] calldata ids,
-        uint256[] calldata values,
+        address, /*operator*/
+        address, /*from*/
+        uint256[] calldata, /*ids*/
+        uint256[] calldata, /*values*/
         bytes calldata data
     ) external override returns (bytes4) {
-        /**@notice This is not allowed. Just transfer one predefined id here */
-        operator;
-        from;
-        ids;
-        values;
         _decodeAndCall(data);
         return ERC1155Receiver(0).onERC1155BatchReceived.selector;
     }
