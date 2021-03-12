@@ -6,6 +6,7 @@ pragma experimental ABIEncoderV2;
 import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol';
+import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
 import 'solidity-bytes-utils/contracts/BytesLib.sol';
 import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
 
@@ -13,6 +14,7 @@ import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
 contract Upkaran_With_TransferFrom_Restriction is
     BaseRelayRecipient,
     ERC1155Receiver,
+    IERC721Receiver,
     IERC3156FlashBorrower
 {
     using BytesLib for bytes;
@@ -137,5 +139,25 @@ contract Upkaran_With_TransferFrom_Restriction is
     ) external override returns (bytes4) {
         _decodeAndCall(data);
         return ERC1155Receiver(0).onERC1155BatchReceived.selector;
+    }
+
+    //TODO: figure out if registerInterface makes a difference and need to do it for 721
+    /**
+     * @dev Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom}
+     * by `operator` from `from`, this function is called.
+     *
+     * It must return its Solidity selector to confirm the token transfer.
+     * If any other value is returned or the interface is not implemented by the recipient, the transfer will be reverted.
+     *
+     * The selector can be obtained in Solidity with `IERC721.onERC721Received.selector`.
+     */
+    function onERC721Received(
+        address, /*operator*/
+        address, /*from*/
+        uint256, /*tokenId*/
+        bytes calldata data
+    ) external override returns (bytes4) {
+        _decodeAndCall(data);
+        return IERC721Receiver.onERC721Received.selector;
     }
 }
