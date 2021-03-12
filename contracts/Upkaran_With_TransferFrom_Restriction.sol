@@ -7,15 +7,13 @@ import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol';
 import 'solidity-bytes-utils/contracts/BytesLib.sol';
+import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
 
-//A generuc contract that gets permission from user and executes stuff
-//Why? because a permit given to any other multicall type contract can be front run
-//After permit we can do any batch transaction we want
-
-//A gernealized batching solution for ERC20s
+//generalized batching solution
 contract Upkaran_With_TransferFrom_Restriction is
     BaseRelayRecipient,
-    ERC1155Receiver
+    ERC1155Receiver,
+    IERC3156FlashBorrower
 {
     using BytesLib for bytes;
     struct Call {
@@ -66,6 +64,37 @@ contract Upkaran_With_TransferFrom_Restriction is
         }
     }
 
+    function _decodeAndCall(bytes calldata data) internal {
+        if (!data.equal('')) {
+            Call[] memory calls = abi.decode(data, (Call[]));
+            batch(calls);
+        }
+    }
+
+    /**
+     * @dev Receive a flash loan.
+     * @param initiator The initiator of the loan.
+     * @param token The loan currency.
+     * @param amount The amount of tokens lent.
+     * @param fee The additional amount of tokens to repay.
+     * @param data Arbitrary data structure, intended to contain user-defined parameters.
+     * @return The keccak256 hash of "ERC3156FlashBorrower.onFlashLoan"
+     */
+    function onFlashLoan(
+        address initiator,
+        address token,
+        uint256 amount,
+        uint256 fee,
+        bytes calldata data
+    ) external override returns (bytes32) {
+        initiator;
+        token;
+        amount;
+        fee;
+        _decodeAndCall(data);
+        return keccak256('ERC3156FlashBorrower.onFlashLoan');
+    }
+
     /**
         @dev Handles the receipt of a single ERC1155 token type. This function is
         called at the end of a `safeTransferFrom` after the balance has been updated.
@@ -79,7 +108,6 @@ contract Upkaran_With_TransferFrom_Restriction is
         @param data Additional data with no specified format
         @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
     */
-    //TODO: decode the data to see what calls it wants to execute
     function onERC1155Received(
         address operator,
         address from,
@@ -92,10 +120,7 @@ contract Upkaran_With_TransferFrom_Restriction is
         from;
         id;
         value;
-        if (!data.equal('')) {
-            Call[] memory calls = abi.decode(data, (Call[]));
-            batch(calls);
-        }
+        _decodeAndCall(data);
         return ERC1155Receiver(0).onERC1155Received.selector;
     }
 
@@ -124,10 +149,7 @@ contract Upkaran_With_TransferFrom_Restriction is
         from;
         ids;
         values;
-        if (!data.equal('')) {
-            Call[] memory calls = abi.decode(data, (Call[]));
-            batch(calls);
-        }
+        _decodeAndCall(data);
         return ERC1155Receiver(0).onERC1155BatchReceived.selector;
     }
 }

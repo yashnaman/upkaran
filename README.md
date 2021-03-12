@@ -19,3 +19,6 @@ Now I am going to make a specialized contract for every pattern that I want to i
 
 update: 
 Used this pattern to support gasless swaps on balancer by updating their [multihop](https://github.com/Upkaranam/exchange-proxy/blob/multi-hop/contracts/ExchangeProxy.sol) contract. Also this pattern inherentely supports batching of transactions : 
+
+
+@opengsn/gsn package is supported only on node version 10...

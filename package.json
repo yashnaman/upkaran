@@ -1,0 +1,24 @@
+{
+  "name": "upkaran",
+  "version": "1.0.0",
+  "description": "This is was supposed to be solution to batching transaction by an EOA and not a contract wallet.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@opengsn/gsn": "^2.1.0",
+    "@openzeppelin/contracts": "^3.4.1",
+    "@truffle/hdwallet-provider": "^1.2.2",
+    "dotenv": "^8.2.0",
+    "erc3156": "^0.4.8",
+    "solidity-bytes-utils": "^0.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
