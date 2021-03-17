@@ -1,0 +1,21 @@
+{
+  "name": "ethers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx -p typescript tsc && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@studydefi/money-legos": "^2.4.1",
+    "@types/node": "^14.14.35",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.0.32",
+    "ethers-typescript-typings": "0.0.4",
+    "truffle-token-test-utils": "git+https://github.com/yashnaman/truffle-token-test-utils.git"
+  }
+}
