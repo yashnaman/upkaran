@@ -34,6 +34,9 @@ contract Upkaran_With_TransferFrom_Restriction is
         return '2.0.0';
     }
 
+    //receive eth
+    receive() external payable {}
+
     function batch(Call[] memory calls) public payable {
         // external with ABIEncoderV2 Struct is not supported in solidity < 0.6.4
         for (uint256 i = 0; i < calls.length; i++) {
