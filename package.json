@@ -1,7 +1,7 @@
 {
   "name": "upkaran",
   "version": "1.0.0",
-  "description": "This is was supposed to be solution to batching transaction by an EOA and not a contract wallet.",
+  "description": "A generalized batching solution.",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
@@ -12,7 +12,7 @@
     "@truffle/hdwallet-provider": "^1.2.2",
     "dotenv": "^8.2.0",
     "erc3156": "^0.4.8",
-    "solidity-bytes-utils": "^0.1.2"
+    "solidity-bytes-utils": "git+https://github.com/yashnaman/solidity-bytes-utils.git"
   },
   "devDependencies": {},
   "scripts": {
