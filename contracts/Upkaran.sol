@@ -27,8 +27,6 @@ contract Upkaran is
         uint256 value;
     }
 
-    // event SomeData(address _someData);
-
     constructor(address forwarder) public {
         trustedForwarder = forwarder;
     }
@@ -59,7 +57,6 @@ contract Upkaran is
                 data.toAddress(16) == _msgSender(), // 16+4(the function selector) = 20
                 'transferFrom is not allowed if _msgsender() != from'
             );
-            // emit SomeData(data.toAddress(16));
         }
         (bool success, ) = to.call{value: value}(data);
         // (bool success, ) = to.call.value(value)(data);
