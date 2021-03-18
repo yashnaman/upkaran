@@ -12,7 +12,6 @@ import 'solidity-bytes-utils/contracts/BytesLib.sol';
 import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
 
 //generalized batching solution
-//TODO: Handle ERC185 for ERC721
 contract Upkaran is
     BaseRelayRecipient,
     ERC1155Receiver,
@@ -28,6 +27,8 @@ contract Upkaran is
     }
 
     constructor(address forwarder) public {
+        //0x150b7a02 is ERC-165 identifier for function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes _data) external returns(bytes4);
+        _registerInterface(0x150b7a02);
         trustedForwarder = forwarder;
     }
 
