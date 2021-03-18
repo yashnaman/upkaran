@@ -1,4 +1,5 @@
 
+const TestERC20 = artifacts.require("TestERC20");
 const TestERC721 = artifacts.require("TestERC721");
 const TestERC777 = artifacts.require("TestERC777");
 const TestERC1155 = artifacts.require("TestERC1155");
@@ -22,17 +23,45 @@ const convertCallsToBytes = function (calls) {
     return web3.eth.abi.encodeParameter(CALL_TYPE, calls);
 };
 contract("~upkaran works", function (accounts) {
-    const [owner, mockforwarder] = accounts;
+    const [owner, someoneElse, mockforwarder] = accounts;
     const tokenId = 1;
     const amount = 1;
     const tokenIds = [1, 2];
     const amounts = [1, 2];
     const emptyData = "0x";
     beforeEach(async function () {
+        this.erc20 = await TestERC20.new();
         this.nft = await TestERC721.new();
         this.erc777Token = await TestERC777.new();
         this.erc1155Token = await TestERC1155.new();
         this.upkaran = await Upkaran.new(mockforwarder);
+    });
+    describe("handles ERC20s correctly", function () {
+        it("when transferFrom is called by approver itself", async function () {
+            await this.erc20.approve(this.upkaran.address, amount);
+            let calls = [];
+            const transferFromTosomeoneElseaCall = formateCall(this.erc20.address, this.erc20.contract.methods.transferFrom(owner, someoneElse, amount).encodeABI());
+            calls.push(transferFromTosomeoneElseaCall);
+            await this.upkaran.batch(calls);
+            expect((await this.erc20.balanceOf(someoneElse)).toString()).to.be.equal(amount.toString());
+        });
+        it("reverts when transferFrom is called by someone else", async function () {
+            await this.erc20.approve(this.upkaran.address, amount);
+            let calls = [];
+            const transferFromTosomeoneElseaCall = formateCall(this.erc20.address, this.erc20.contract.methods.transferFrom(owner, someoneElse, amount).encodeABI());
+            calls.push(transferFromTosomeoneElseaCall);
+
+            let actualError = null;
+            const expectedError = "Returned error: VM Exception while processing transaction: revert Upkaran/transferFrom-not-allowed -- Reason given: Upkaran/transferFrom-not-allowed.";
+            try {
+                await this.upkaran.batch(calls, { from: someoneElse });
+            } catch (error) {
+                actualError = error.message;
+            }
+            expect(actualError).to.equal(expectedError, 'Wrong kind of exception received');
+
+            expect((await this.erc20.balanceOf(owner)).toString()).to.be.equal(amount.toString());
+        });
     });
     describe("handles NFTs correctly", function () {
         it("when data is given (data = should transfer NFT back)", async function () {
@@ -48,7 +77,7 @@ contract("~upkaran works", function (accounts) {
             expect(await this.nft.ownerOf(tokenId)).to.be.equal(this.upkaran.address);
         });
     });
-    //TODO: we need to first add ERC1820;
+
     describe("handles ERC777 correctly", function () {
         it("when data is given (data = should transfer ERC777 back)", async function () {
             let calls = [];
@@ -94,4 +123,5 @@ contract("~upkaran works", function (accounts) {
             });
         });
     });
+
 });

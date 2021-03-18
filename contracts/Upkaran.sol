@@ -57,7 +57,7 @@ contract Upkaran is
         if (data.toBytes4(0) == IERC20(0).transferFrom.selector) {
             require(
                 data.toAddress(16) == _msgSender(), // 16+4(the function selector) = 20
-                'transferFrom is not allowed if _msgsender() != from'
+                'Upkaran/transferFrom-not-allowed'
             );
         }
         (bool success, ) = to.call{value: value}(data);
