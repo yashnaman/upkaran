@@ -10,7 +10,7 @@ import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
 //A generuc contract that gets permission from user and executes stuff
 //Why? because a permit given to any other multicall type contract can be front run
 //After permit we can do any batch transaction we want
-contract Upkaran is BaseRelayRecipient {
+contract Upkaran_Old is BaseRelayRecipient {
     struct Call {
         address to;
         bytes data;

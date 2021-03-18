@@ -1,6 +1,6 @@
 import { constants, Contract, ethers } from "ethers";
 import dotenv from 'dotenv';
-import Upkaran from "../build/contracts/Upkaran_With_TransferFrom_Restriction.json";
+import Upkaran from "../build/contracts/Upkaran.json";
 import ERC3156Lender from "./abis/IERC3156FlashLender.json";
 import { legos } from "@studydefi/money-legos";
 import addresses from "./addresses.json";

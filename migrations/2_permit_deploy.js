@@ -1,4 +1,4 @@
-const Upkaran = artifacts.require("Upkaran_With_TransferFrom_Restriction");
+const Upkaran = artifacts.require("Upkaran");
 var TestERC20 = artifacts.require("TestERC20");
 
 const trustredForwarder = {

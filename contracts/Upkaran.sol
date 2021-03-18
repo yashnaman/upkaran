@@ -7,15 +7,18 @@ import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
+import '@openzeppelin/contracts/token/ERC777/IERC777Recipient.sol';
 import 'solidity-bytes-utils/contracts/BytesLib.sol';
 import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
 
 //generalized batching solution
-contract Upkaran_With_TransferFrom_Restriction is
+//TODO: Handle ERC185 and ERC1820
+contract Upkaran is
     BaseRelayRecipient,
     ERC1155Receiver,
     IERC721Receiver,
-    IERC3156FlashBorrower
+    IERC3156FlashBorrower,
+    IERC777Recipient
 {
     using BytesLib for bytes;
     struct Call {
@@ -144,7 +147,6 @@ contract Upkaran_With_TransferFrom_Restriction is
         return ERC1155Receiver(0).onERC1155BatchReceived.selector;
     }
 
-    //TODO: figure out if registerInterface makes a difference and need to do it for 721
     /**
      * @dev Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom}
      * by `operator` from `from`, this function is called.
@@ -162,5 +164,26 @@ contract Upkaran_With_TransferFrom_Restriction is
     ) external override returns (bytes4) {
         _decodeAndCall(data);
         return IERC721Receiver.onERC721Received.selector;
+    }
+
+    /**
+     * @dev Called by an {IERC777} token contract whenever tokens are being
+     * moved or created into a registered account (`to`). The type of operation
+     * is conveyed by `from` being the zero address or not.
+     *
+     * This call occurs _after_ the token contract's state is updated, so
+     * {IERC777-balanceOf}, etc., can be used to query the post-operation state.
+     *
+     * This function may revert to prevent the operation from being executed.
+     */
+    function tokensReceived(
+        address, /*operator*/
+        address, /*from*/
+        address, /*to*/
+        uint256, /*amount*/
+        bytes calldata userData,
+        bytes calldata /*operatorData*/
+    ) external override {
+        _decodeAndCall(userData);
     }
 }
