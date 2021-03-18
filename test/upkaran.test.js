@@ -48,21 +48,21 @@ contract("~upkaran works", function (accounts) {
             expect(await this.nft.ownerOf(tokenId)).to.be.equal(this.upkaran.address);
         });
     });
-    //TODO: we need to first add ERC1820
-    // describe("handles ERC777 correctly", function () {
-    //     it("when data is given (data = should transfer ERC777 back)", async function () {
-    //         let calls = [];
-    //         const transferERC777BackCall = formateCall(this.erc777Token.address, this.erc777Token.contract.methods.transfer(owner, amount).encodeABI());
-    //         calls.push(transferERC777BackCall);
-    //         const data = convertCallsToBytes(calls);
-    //         await this.erc777Token.send(this.upkaran.address, amount, data);
-    //         expect((await this.erc777Token.balanceOf(owner)).toString()).to.be.equal(amount);
-    //     });
-    //     it("when data is not given", async function () {
-    //         await this.erc777Token.transfer(this.upkaran.address, amount);
-    //         expect((await this.erc777Token.balanceOf(this.upkaran.address)).toString()).to.be.equal(amount);
-    //     });
-    // });
+    //TODO: we need to first add ERC1820;
+    describe("handles ERC777 correctly", function () {
+        it("when data is given (data = should transfer ERC777 back)", async function () {
+            let calls = [];
+            const transferERC777BackCall = formateCall(this.erc777Token.address, this.erc777Token.contract.methods.transfer(owner, amount).encodeABI());
+            calls.push(transferERC777BackCall);
+            const data = convertCallsToBytes(calls);
+            await this.erc777Token.send(this.upkaran.address, amount, data);
+            expect((await this.erc777Token.balanceOf(owner)).toString()).to.be.equal(amount.toString());
+        });
+        it("when data is not given", async function () {
+            await this.erc777Token.transfer(this.upkaran.address, amount);
+            expect((await this.erc777Token.balanceOf(this.upkaran.address)).toString()).to.be.equal(amount.toString());
+        });
+    });
 
     describe("handles ERC1155 correctly", function () {
         describe("single transfer", function () {
