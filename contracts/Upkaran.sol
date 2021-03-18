@@ -50,8 +50,7 @@ contract Upkaran is
         uint256 value,
         bytes memory data
     ) internal {
-        // require that data != transferFrom function signature
-        //get the first four bytes
+        //require that if data is equal to transferFrom function signature then "from" is equal to msg.sender
         if (data.toBytes4(0) == IERC20(0).transferFrom.selector) {
             require(
                 data.toAddress(16) == _msgSender(), // 16+4(the function selector) = 20
