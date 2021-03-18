@@ -40,16 +40,16 @@ contract("~upkaran works", function (accounts) {
         it("when transferFrom is called by approver itself", async function () {
             await this.erc20.approve(this.upkaran.address, amount);
             let calls = [];
-            const transferFromTosomeoneElseaCall = formateCall(this.erc20.address, this.erc20.contract.methods.transferFrom(owner, someoneElse, amount).encodeABI());
-            calls.push(transferFromTosomeoneElseaCall);
+            const transferFromTosomeoneElseCall = formateCall(this.erc20.address, this.erc20.contract.methods.transferFrom(owner, someoneElse, amount).encodeABI());
+            calls.push(transferFromTosomeoneElseCall);
             await this.upkaran.batch(calls);
             expect((await this.erc20.balanceOf(someoneElse)).toString()).to.be.equal(amount.toString());
         });
         it("reverts when transferFrom is called by someone else", async function () {
             await this.erc20.approve(this.upkaran.address, amount);
             let calls = [];
-            const transferFromTosomeoneElseaCall = formateCall(this.erc20.address, this.erc20.contract.methods.transferFrom(owner, someoneElse, amount).encodeABI());
-            calls.push(transferFromTosomeoneElseaCall);
+            const transferFromTosomeoneElseCall = formateCall(this.erc20.address, this.erc20.contract.methods.transferFrom(owner, someoneElse, amount).encodeABI());
+            calls.push(transferFromTosomeoneElseCall);
 
             let actualError = null;
             const expectedError = "Returned error: VM Exception while processing transaction: revert Upkaran/transferFrom-not-allowed -- Reason given: Upkaran/transferFrom-not-allowed.";
