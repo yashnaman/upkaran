@@ -7,19 +7,17 @@ import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
-// import '@openzeppelin/contracts/token/ERC777/IERC777Recipient.sol';
 import './ERC777Receiver.sol';
 import 'solidity-bytes-utils/contracts/BytesLib.sol';
 import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
 
 //generalized batching solution
-//TODO: Handle ERC185 and ERC1820
+//TODO: Handle ERC185 for ERC721
 contract Upkaran is
     BaseRelayRecipient,
     ERC1155Receiver,
     IERC721Receiver,
     IERC3156FlashBorrower,
-    // IERC777Recipient
     ERC777Receiver
 {
     using BytesLib for bytes;
@@ -165,26 +163,6 @@ contract Upkaran is
         return IERC721Receiver.onERC721Received.selector;
     }
 
-    // /**
-    //  * @dev Called by an {IERC777} token contract whenever tokens are being
-    //  * moved or created into a registered account (`to`). The type of operation
-    //  * is conveyed by `from` being the zero address or not.
-    //  *
-    //  * This call occurs _after_ the token contract's state is updated, so
-    //  * {IERC777-balanceOf}, etc., can be used to query the post-operation state.
-    //  *
-    //  * This function may revert to prevent the operation from being executed.
-    //  */
-    // function tokensReceived(
-    //     address, /*operator*/
-    //     address, /*from*/
-    //     address, /*to*/
-    //     uint256, /*amount*/
-    //     bytes calldata userData,
-    //     bytes calldata /*operatorData*/
-    // ) external override {
-    //     _decodeAndCall(userData);
-    // }
     function _tokensReceived(bytes calldata data) internal override {
         _decodeAndCall(data);
     }
