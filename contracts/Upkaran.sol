@@ -8,8 +8,10 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
 import './ERC777Receiver.sol';
+import './Interfaces/IERC677Receiver.sol';
 import 'solidity-bytes-utils/contracts/BytesLib.sol';
 import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
+import './Interfaces/IWETH.sol';
 
 //generalized batching solution
 contract Upkaran is
@@ -17,19 +19,22 @@ contract Upkaran is
     ERC1155Receiver,
     IERC721Receiver,
     IERC3156FlashBorrower,
-    ERC777Receiver
+    ERC777Receiver,
+    IERC677Receiver
 {
     using BytesLib for bytes;
+    IWETH WEth;
     struct Call {
         address to;
         bytes data;
         uint256 value;
     }
 
-    constructor(address forwarder) public {
+    constructor(address forwarder, IWETH weth) public {
         //0x150b7a02 is ERC-165 identifier for function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes _data) external returns(bytes4);
         _registerInterface(0x150b7a02);
         trustedForwarder = forwarder;
+        WEth = weth;
     }
 
     function versionRecipient() external view override returns (string memory) {
@@ -44,6 +49,11 @@ contract Upkaran is
         for (uint256 i = 0; i < calls.length; i++) {
             _call(calls[i].to, calls[i].value, calls[i].data);
         }
+    }
+
+    //send eth to miner
+    function sendToCoinbaseETH() public payable {
+        block.coinbase.transfer(msg.value);
     }
 
     function _call(
@@ -165,5 +175,14 @@ contract Upkaran is
 
     function _tokensReceived(bytes calldata data) internal override {
         _decodeAndCall(data);
+    }
+
+    function onTokenTransfer(
+        address, /*from*/
+        uint256, /*amount*/
+        bytes calldata data
+    ) external override returns (bool success) {
+        _decodeAndCall(data);
+        return true;
     }
 }

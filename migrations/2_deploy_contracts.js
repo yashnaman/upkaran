@@ -5,5 +5,4 @@ const trustredForwarder = {
 };
 module.exports = async function (deployer) {
   await deployer.deploy(Upkaran, trustredForwarder.mainnet);
-  let upkaran = await Upkaran.deployed();
 };
