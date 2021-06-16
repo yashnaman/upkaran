@@ -3,9 +3,9 @@ pragma solidity ^0.6.12;
 
 pragma experimental ABIEncoderV2;
 
-import './Interfaces/IDaiLikePermit.sol';
-import './Interfaces/IEIP2585LikePermit.sol';
-import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
+import "./Interfaces/IDaiLikePermit.sol";
+import "./Interfaces/IEIP2585LikePermit.sol";
+import "@opengsn/gsn/contracts/BaseRelayRecipient.sol";
 
 //A generuc contract that gets permission from user and executes stuff
 //Why? because a permit given to any other multicall type contract can be front run
@@ -22,12 +22,12 @@ contract Upkaran_Old is BaseRelayRecipient {
     }
 
     function versionRecipient() external view override returns (string memory) {
-        return '2.0.0';
+        return "2.0.0";
     }
 
     function batch(Call[] memory calls) public payable {
         // external with ABIEncoderV2 Struct is not supported in solidity < 0.6.4
-        require(_msgSender() == address(this), 'NOT_ALLOWED');
+        require(_msgSender() == address(this), "NOT_ALLOWED");
         for (uint256 i = 0; i < calls.length; i++) {
             _call(calls[i].to, calls[i].value, calls[i].data);
         }
@@ -39,7 +39,7 @@ contract Upkaran_Old is BaseRelayRecipient {
         bytes memory data
     ) internal {
         // require that data != transferFrom function signature
-        (bool success, ) = to.call{value: value}(data);
+        (bool success, ) = to.call{ value: value }(data);
         // (bool success, ) = to.call.value(value)(data);
         if (!success) {
             assembly {
@@ -63,29 +63,11 @@ contract Upkaran_Old is BaseRelayRecipient {
     ) public {
         uint256 nonce = IDaiLikePermit(tokenAddress).nonces(_msgSender());
         //give permit
-        IDaiLikePermit(tokenAddress).permit(
-            _msgSender(),
-            address(this),
-            nonce++,
-            expiry,
-            true,
-            v1,
-            r1,
-            s1
-        );
+        IDaiLikePermit(tokenAddress).permit(_msgSender(), address(this), nonce++, expiry, true, v1, r1, s1);
 
         _call(call.to, call.value, call.data);
         // //take back the permit
-        IDaiLikePermit(tokenAddress).permit(
-            _msgSender(),
-            address(this),
-            nonce,
-            expiry,
-            false,
-            v2,
-            r2,
-            s2
-        );
+        IDaiLikePermit(tokenAddress).permit(_msgSender(), address(this), nonce, expiry, false, v2, r2, s2);
     }
 
     function eip2585LikePermitAndCall(
@@ -97,15 +79,7 @@ contract Upkaran_Old is BaseRelayRecipient {
         bytes32 r,
         bytes32 s
     ) public {
-        IEIP2585LikePermit(tokenAddress).permit(
-            _msgSender(),
-            address(this),
-            value,
-            deadline,
-            v,
-            r,
-            s
-        );
+        IEIP2585LikePermit(tokenAddress).permit(_msgSender(), address(this), value, deadline, v, r, s);
         _call(call.to, call.value, call.data);
     }
 }

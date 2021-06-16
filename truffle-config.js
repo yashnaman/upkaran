@@ -54,10 +54,7 @@ module.exports = {
     },
     kovan: {
       provider: function () {
-        return new HDWalletProvider(
-          mnemonic,
-          "https://kovan.infura.io/v3/" + infuraKey
-        );
+        return new HDWalletProvider(mnemonic, "https://kovan.infura.io/v3/" + infuraKey);
       },
       network_id: "42",
       // gas: 8000000,
@@ -67,10 +64,7 @@ module.exports = {
     },
     mainnet: {
       provider: function () {
-        return new HDWalletProvider(
-          mnemonic,
-          "https://mainnet.infura.io/v3/" + infuraKey
-        );
+        return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/" + infuraKey);
       },
       network_id: 1,
       // gas: 8000000,

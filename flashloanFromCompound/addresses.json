@@ -1,7 +1,7 @@
 {
-    "mainnet": {
-        "erc3156": {
-            "erc3156DydxWrapper": "0x6bdC1FCB2F13d1bA9D26ccEc3983d5D4bf318693"
-        }
+  "mainnet": {
+    "erc3156": {
+      "erc3156DydxWrapper": "0x6bdC1FCB2F13d1bA9D26ccEc3983d5D4bf318693"
     }
+  }
 }
