@@ -3,15 +3,15 @@ pragma solidity ^0.6.12;
 
 pragma experimental ABIEncoderV2;
 
-import '@opengsn/gsn/contracts/BaseRelayRecipient.sol';
-import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import '@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol';
-import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';
-import './ERC777Receiver.sol';
-import './Interfaces/IERC677Receiver.sol';
-import 'solidity-bytes-utils/contracts/BytesLib.sol';
-import 'erc3156/contracts/interfaces/IERC3156FlashBorrower.sol';
-import './Interfaces/IWETH.sol';
+import "@opengsn/gsn/contracts/BaseRelayRecipient.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "./ERC777Receiver.sol";
+import "./Interfaces/IERC677Receiver.sol";
+import "solidity-bytes-utils/contracts/BytesLib.sol";
+import "erc3156/contracts/interfaces/IERC3156FlashBorrower.sol";
+import "./Interfaces/IWETH.sol";
 
 //generalized batching solution
 contract Upkaran is
@@ -38,7 +38,7 @@ contract Upkaran is
     }
 
     function versionRecipient() external view override returns (string memory) {
-        return '2.0.0';
+        return "2.0.0";
     }
 
     //receive eth
@@ -65,10 +65,10 @@ contract Upkaran is
         if (data.toBytes4(0) == IERC20(0).transferFrom.selector) {
             require(
                 data.toAddress(16) == _msgSender(), // 16+4(the function selector) = 20
-                'Upkaran/transferFrom-not-allowed'
+                "Upkaran/transferFrom-not-allowed"
             );
         }
-        (bool success, ) = to.call{value: value}(data);
+        (bool success, ) = to.call{ value: value }(data);
         // (bool success, ) = to.call.value(value)(data);
         if (!success) {
             assembly {
@@ -80,7 +80,7 @@ contract Upkaran is
     }
 
     function _decodeAndCall(bytes calldata data) internal {
-        if (!data.equal('')) {
+        if (!data.equal("")) {
             Call[] memory calls = abi.decode(data, (Call[]));
             batch(calls);
         }
@@ -103,7 +103,7 @@ contract Upkaran is
         bytes calldata data
     ) external override returns (bytes32) {
         _decodeAndCall(data);
-        return keccak256('ERC3156FlashBorrower.onFlashLoan');
+        return keccak256("ERC3156FlashBorrower.onFlashLoan");
     }
 
     /**
